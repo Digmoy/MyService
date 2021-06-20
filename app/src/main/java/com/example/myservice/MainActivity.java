@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.myservice.Service.MusicPlayerService;
+import com.example.myservice.Service.MyForegroundService;
 import com.example.myservice.Service.MyStartedService;
 
 public class MainActivity extends AppCompatActivity {
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
         displayProgressBar(true);
 
         //send intent to download service
+        Intent intent = new Intent(MainActivity.this, MyForegroundService.class);
+        startService(intent);
 
     }
 
