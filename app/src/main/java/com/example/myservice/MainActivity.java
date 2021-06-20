@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String songName = intent.getStringExtra(MESSAGE_KEY);
+            Log.d(TAG, "song name: "+songName);
             log(songName);
             Log.d(TAG, "onReceive: Thread name "+Thread.currentThread().getName());
         }
