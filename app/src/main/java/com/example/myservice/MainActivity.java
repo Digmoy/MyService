@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.myservice.Service.MyIntentService;
 import com.example.myservice.Service.MyStartedService;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         //send intent to download service
 
         for (String song:Playlist.songs){
-            Intent intent=new Intent(MainActivity.this,MyStartedService.class);
+            Intent intent=new Intent(MainActivity.this, MyIntentService.class);
             intent.putExtra(MESSAGE_KEY,song);
 
             startService(intent);
