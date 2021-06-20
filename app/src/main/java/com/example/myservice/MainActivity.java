@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(getApplicationContext()).
-                registerReceiver(mBroadcastReceiver,new IntentFilter(DownloadHandler.SERVICE_MESSAGE));
+                registerReceiver(mBroadcastReceiver,new IntentFilter(MyIntentService.INTENT_SERVICE_MESSAGE));
     }
 
     @Override

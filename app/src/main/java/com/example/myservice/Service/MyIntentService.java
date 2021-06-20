@@ -4,12 +4,15 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.example.myservice.MainActivity;
 
 
 public class MyIntentService extends IntentService {
 
     public static final String TAG = "MyTag";
+    public static final String INTENT_SERVICE_MESSAGE = "intentServiceMessage";
 
     public MyIntentService() {
         super("MyIntentService");
@@ -29,6 +32,14 @@ public class MyIntentService extends IntentService {
         Log.d(TAG, "onHandleIntent: Thread name "+Thread.currentThread().getName());
         String songName = intent.getStringExtra(MainActivity.MESSAGE_KEY);
         downloadSong(songName);
+        sendDataToUo(songName);
+    }
+
+    private void sendDataToUo(String songName) {
+
+        Intent intent = new Intent(INTENT_SERVICE_MESSAGE);
+        intent.putExtra(MainActivity.MESSAGE_KEY,songName);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     private void downloadSong(final String songName){
