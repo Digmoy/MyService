@@ -1,20 +1,20 @@
 package com.example.myservice;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.myservice.Service.MyIntentService;
+import com.example.myservice.Service.MyBoundService;
 import com.example.myservice.Service.MyStartedService;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +23,23 @@ public class MainActivity extends AppCompatActivity {
     private ScrollView mScroll;
     private TextView mLog;
     private ProgressBar mProgressBar;
+
+    private MyBoundService myBoundService;
+    private boolean mBound = true;
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder iBinder) {
+            Log.d(TAG, "onServiceConnected: ");
+            MyBoundService.MyServiceBinder myServiceBinder = (MyBoundService.MyServiceBinder) iBinder;
+            myBoundService=myServiceBinder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "onServiceDisconnected: ");
+        }
+    };
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -47,13 +64,6 @@ public class MainActivity extends AppCompatActivity {
         displayProgressBar(true);
 
         //send intent to download service
-
-        for (String song:Playlist.songs){
-            Intent intent=new Intent(MainActivity.this, MyIntentService.class);
-            intent.putExtra(MESSAGE_KEY,song);
-
-            startService(intent);
-        }
 
     }
 
@@ -98,13 +108,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        LocalBroadcastManager.getInstance(getApplicationContext()).
-                registerReceiver(mBroadcastReceiver,new IntentFilter(MyIntentService.INTENT_SERVICE_MESSAGE));
+        Intent intent = new Intent(MainActivity.this,MyBoundService.class);
+        bindService(intent,mServiceConnection,Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mBroadcastReceiver);
+        if (mBound){
+            unbindService(mServiceConnection);
+            mBound = false;
+        }
     }
 }
