@@ -1,6 +1,7 @@
 package com.example.myservice;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.BroadcastReceiver;
@@ -18,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.myservice.Constants.Constants;
 import com.example.myservice.Service.MusicPlayerService;
 import com.example.myservice.Service.MyForegroundService;
 import com.example.myservice.Service.MyStartedService;
@@ -77,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
             else
             {
                 Intent intent = new Intent(MainActivity.this,MusicPlayerService.class);
-                startService(intent);
+                intent.setAction(Constants.MUSIC_SERVICE_ACTION_START);
+                ContextCompat.startForegroundService(this,intent);
                 musicPlayerService.play();
                 mPlayButton.setText("Pause");
             }

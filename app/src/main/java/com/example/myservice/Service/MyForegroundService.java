@@ -68,7 +68,7 @@ public class MyForegroundService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void startMyOwnForeground() {
-        String NOTIFICATION_CHANNEL_ID = "com.example.simpleapp";
+        String NOTIFICATION_CHANNEL_ID = "com.example.myservice";
         String channelName = "My Background Service";
         NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
         chan.setLightColor(Color.BLUE);
